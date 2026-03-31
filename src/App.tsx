@@ -148,7 +148,19 @@ function App() {
           </div>
         ) : (
           <div className="left-rail-body">
-            <div className="section-label">Threads</div>
+            <div className="threads-header">
+              <div>
+                <div className="section-label">Threads</div>
+                <div className="threads-subtitle">Recent conversations across workflows</div>
+              </div>
+              <button className="chip tertiary chip-xs">Filter</button>
+            </div>
+            <div className="threads-filters">
+              <button className="pill-filter active">All</button>
+              <button className="pill-filter">Workflow-linked</button>
+              <button className="pill-filter">General</button>
+            </div>
+
             <ul className="thread-list">
               {mockThreads.map((t) => (
                 <li key={t.id} className="thread-row">
@@ -157,7 +169,7 @@ function App() {
                       <span className="thread-title">{t.title}</span>
                       {t.isWorkflow && (
                         <span className="thread-workflow-chip" title="Linked to a workflow step">
-                          ⛓
+                          Workflow step
                         </span>
                       )}
                     </div>

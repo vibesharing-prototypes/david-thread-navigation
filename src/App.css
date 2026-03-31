@@ -96,7 +96,7 @@ body {
   padding: 0 4px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   overflow: hidden;
 }
 
@@ -179,6 +179,45 @@ body {
   font-size: 11px;
   color: #8089b5;
   padding-left: 4px;
+}
+
+.threads-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.threads-subtitle {
+  font-size: 11px;
+  color: #8a93c2;
+}
+
+.threads-filters {
+  display: flex;
+  gap: 4px;
+  margin: 2px 0 4px;
+}
+
+.chip-xs {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.pill-filter {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 3px 8px;
+  font-size: 11px;
+  background: rgba(23, 27, 56, 0.96);
+  color: #a5aedb;
+  cursor: pointer;
+}
+
+.pill-filter.active {
+  border-color: rgba(134, 154, 255, 0.9);
+  background: radial-gradient(circle at top left, #657cff, #2b3bdd);
+  color: #f9fbff;
 }
 
 .thread-list {
