@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text',
@@ -12,12 +17,8 @@ body {
   color: #e7ecf7;
 }
 
-#root {
-  height: 100vh;
-}
-
 .app-shell {
-  height: 100%;
+  height: 100vh;
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr) auto;
   grid-template-rows: 100%;
@@ -706,7 +707,8 @@ body {
 
 .object-row.active {
   border-color: rgba(139, 162, 255, 0.95);
-  background: radial-gradient(circle at left, rgba(126, 148, 255, 0.55), rgba(21, 23, 46, 0.96));
+  background: radial-gradient(circle at left, rgba(126, 148, 255, 0.55),
+      rgba(21, 23, 46, 0.96));
   box-shadow: 0 0 0 1px rgba(148, 171, 255, 0.72);
 }
 
@@ -813,3 +815,4 @@ body {
   font-size: 11px;
   resize: vertical;
 }
+

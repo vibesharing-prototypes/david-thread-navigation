@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react'
-import './App.css'
+import './globals.css'
 
 type ViewMode = 'nav' | 'threads'
 
@@ -45,7 +47,7 @@ const mockThreads: Thread[] = [
   },
 ]
 
-function App() {
+export default function IndexPage() {
   const [viewMode, setViewMode] = React.useState<ViewMode>('nav')
   const [rightWidth, setRightWidth] = React.useState(32)
   const [isResizing, setIsResizing] = React.useState(false)
@@ -71,9 +73,7 @@ function App() {
     }
 
     const handleMouseUp = () => {
-      if (isResizing) {
-        setIsResizing(false)
-      }
+      if (isResizing) setIsResizing(false)
     }
 
     window.addEventListener('mousemove', handleMouseMove)
@@ -341,9 +341,7 @@ function App() {
               <div className="object-pane-body">
                 <div className="object-list">
                   <button
-                    className={
-                      selectedObjectId === 'layout' ? 'object-row active' : 'object-row'
-                    }
+                    className={selectedObjectId === 'layout' ? 'object-row active' : 'object-row'}
                     onClick={() => setSelectedObjectId('layout')}
                   >
                     <span className="object-dot layout" />
@@ -450,4 +448,3 @@ function App() {
   )
 }
 
-export default App
