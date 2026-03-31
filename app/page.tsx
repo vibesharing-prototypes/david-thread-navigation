@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import './globals.css'
 
 type ViewMode = 'nav' | 'threads'
 
@@ -47,6 +46,401 @@ const mockThreads: Thread[] = [
   },
 ]
 
+const GLOBAL_CSS = `
+:root {
+  --s0: 0px;
+  --s0_25: 2px;
+  --s0_5: 4px;
+  --s1: 8px;
+  --s1_5: 12px;
+  --s2: 16px;
+  --s2_5: 20px;
+  --s3: 24px;
+  --s4: 32px;
+
+  --storm5: #0a1020;
+  --storm10: #151b2c;
+  --storm15: #1f2536;
+  --storm20: #2a3041;
+  --storm25: #353b4d;
+  --storm30: #404659;
+  --storm35: #4c5265;
+  --storm50: #71768b;
+  --storm60: #8a90a5;
+  --storm70: #a5abc0;
+
+  --sky80: #83cfff;
+  --indigo60: #6b89ff;
+  --flamingo60: #f45695;
+
+  --bg0: var(--storm10);
+  --bg1: var(--storm15);
+  --surface0: var(--storm15);
+  --surface1: var(--storm20);
+  --surface2: var(--storm25);
+  --line0: var(--storm35);
+  --line1: var(--storm50);
+  --text0: #ffffff;
+  --text1: var(--storm60);
+
+  --ai0: var(--flamingo60);
+  --ai1: var(--indigo60);
+}
+
+*,*::before,*::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  background: radial-gradient(circle at top left, var(--storm5), var(--bg0));
+  color: var(--text0);
+}
+
+button, input, select, textarea { font: inherit; }
+
+.app-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) auto;
+  grid-template-rows: 100%;
+  border-radius: 18px;
+  padding: 10px;
+  background: radial-gradient(circle at top left, var(--bg1), var(--bg0));
+}
+
+.left-rail {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--storm30) 70%, transparent);
+  background: radial-gradient(circle at top, var(--surface2), var(--surface0));
+  padding: 12px 10px;
+  overflow: hidden;
+}
+
+.left-rail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 4px 8px;
+}
+
+.product-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface2) 70%, transparent);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text1);
+}
+
+.product-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--sky80), #2ec377);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky80) 18%, transparent);
+}
+
+.view-switcher {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface2) 80%, transparent);
+  gap: 2px;
+}
+
+.view-pill {
+  border: none;
+  background: transparent;
+  color: var(--text1);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-pill.active {
+  background: linear-gradient(90deg, var(--ai0), var(--ai1));
+  color: var(--storm10);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--sky80) 45%, transparent);
+}
+
+.left-rail-body {
+  margin-top: 10px;
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--text1);
+  padding: 0 4px;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 0 6px;
+}
+
+.nav-item {
+  border-radius: 9px;
+  border: 1px solid transparent;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--text0);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--sky80) 12%, transparent), transparent);
+}
+
+.nav-item.active {
+  border-color: color-mix(in srgb, var(--sky80) 30%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--sky80) 16%, transparent), transparent);
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 7px;
+  background: radial-gradient(circle at 20% 0, color-mix(in srgb, var(--ai1) 55%, #000), var(--surface1));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.workflow-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 2px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.workflow-pill {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #2ec377 14%, transparent);
+  color: color-mix(in srgb, #72fcaa 90%, white);
+  font-size: 12px;
+}
+
+.workflow-sub {
+  font-size: 11px;
+  color: var(--text1);
+  padding-left: 4px;
+}
+
+.threads-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.threads-subtitle {
+  font-size: 11px;
+  color: var(--text1);
+}
+
+.pill-filter {
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 3px 8px;
+  font-size: 11px;
+  background: color-mix(in srgb, var(--surface2) 70%, transparent);
+  color: var(--text0);
+  cursor: pointer;
+}
+
+.pill-filter.active {
+  border-color: color-mix(in srgb, var(--sky80) 45%, transparent);
+  background: linear-gradient(90deg, var(--ai0), var(--ai1));
+  color: var(--storm10);
+}
+
+.thread-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: auto;
+}
+
+.thread-row {
+  display: flex;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top left, var(--surface2), var(--surface1));
+  border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent);
+}
+
+.thread-title { font-size: 13px; font-weight: 500; }
+.thread-last { font-size: 12px; color: var(--text1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.thread-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.thread-time { font-size: 11px; color: var(--text1); }
+.thread-meta-label { font-size: 10px; padding: 2px 6px; border-radius: 999px; background: color-mix(in srgb, #2ec377 14%, transparent); color: #a7fbed; }
+.thread-workflow-chip { font-size: 11px; padding: 1px 6px; border-radius: 999px; background: color-mix(in srgb, var(--ai1) 18%, transparent); }
+
+.center-pane {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px 12px 16px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--storm30) 80%, transparent);
+  background: radial-gradient(circle at top, var(--surface2), var(--bg0));
+  overflow: hidden;
+  margin: 0 8px;
+}
+
+.center-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line0);
+}
+
+.center-title { font-size: 15px; font-weight: 500; }
+.center-subtitle { font-size: 12px; color: var(--text1); }
+.center-header-actions { display: flex; gap: 6px; }
+
+.chip {
+  border-radius: 999px;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  background: linear-gradient(90deg, var(--ai0), var(--ai1));
+  color: var(--storm10);
+}
+
+.chip.secondary {
+  background: color-mix(in srgb, var(--surface2) 70%, transparent);
+  color: var(--text0);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--storm35) 80%, transparent);
+}
+
+.chip.tertiary {
+  background: transparent;
+  color: var(--text1);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--storm35) 70%, transparent);
+}
+
+.chat-window { flex: 1; overflow: auto; padding: 10px 2px 8px; display: flex; flex-direction: column; gap: 10px; }
+.chat-message { display: flex; align-items: flex-start; gap: 8px; }
+.avatar { width: 26px; height: 26px; border-radius: 999px; background: linear-gradient(135deg, var(--ai1), #00d3f3); display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.avatar.ai { background: linear-gradient(135deg, #2ec377, #00d3f3); }
+.bubble { max-width: 80%; border-radius: 14px; padding: 7px 10px 8px; background: radial-gradient(circle at top left, var(--surface2), var(--surface1)); border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent); }
+.bubble-header { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--text1); margin-bottom: 2px; }
+.bubble-body { font-size: 13px; color: var(--text0); }
+
+.composer { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--line0); display: flex; flex-direction: column; gap: 6px; }
+.composer-top-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.composer-mode { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text1); }
+.dot { width: 8px; height: 8px; border-radius: 999px; background: #2ec377; }
+.dot.live { box-shadow: 0 0 8px color-mix(in srgb, #2ec377 55%, transparent); }
+.composer-input-row { display: flex; gap: 8px; align-items: flex-end; }
+.composer-input { flex: 1; resize: none; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--storm35) 90%, transparent); background: color-mix(in srgb, var(--bg0) 75%, transparent); color: var(--text0); font-size: 13px; padding: 7px 9px; }
+.composer-input::placeholder { color: color-mix(in srgb, var(--storm60) 80%, transparent); }
+.composer-send { border-radius: 999px; border: none; padding: 7px 14px; background: linear-gradient(90deg, var(--sky80), #2ec377); color: #06120c; font-size: 13px; cursor: pointer; }
+
+.resize-handle { width: 6px; margin: 6px 2px; border-radius: 999px; background: var(--surface1); border: 1px solid var(--line0); display: flex; align-items: center; justify-content: center; cursor: col-resize; }
+.grip { width: 2px; height: 54px; border-radius: 999px; background: linear-gradient(to bottom, var(--ai1), #2ec377); }
+
+.right-pane {
+  height: 100%;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--storm30) 80%, transparent);
+  background: radial-gradient(circle at top right, var(--surface2), var(--bg0));
+  min-width: 220px;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px 10px;
+  overflow: hidden;
+}
+
+.right-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line0); }
+.right-title { font-size: 14px; font-weight: 500; }
+.right-subtitle { font-size: 12px; color: var(--text1); }
+.right-body { margin-top: 8px; overflow: hidden; display: flex; flex-direction: column; }
+.right-body-columns { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 8px; height: 100%; }
+.right-overview { overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.callout, .callout-list, .timeline, .object-pane { border-radius: 12px; border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent); background: radial-gradient(circle at top left, var(--surface2), var(--surface1)); }
+.callout { padding: 8px 10px 10px; }
+.callout-list, .timeline, .object-pane { padding: 7px 9px 9px; }
+.callout-label { font-size: 11px; color: var(--text1); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 4px; }
+.callout-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.callout-copy { font-size: 12px; color: var(--text1); margin: 0; }
+.callout-list ul, .timeline-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; font-size: 11px; margin-right: 6px; border: 1px solid color-mix(in srgb, var(--storm35) 70%, transparent); }
+.badge-layout { background: color-mix(in srgb, var(--ai1) 14%, transparent); }
+.badge-data { background: color-mix(in srgb, var(--sky80) 14%, transparent); }
+.badge-collab { background: color-mix(in srgb, var(--ai0) 14%, transparent); }
+.timeline-list li { display: flex; gap: 8px; }
+.dot.small { width: 7px; height: 7px; }
+.dot.small.muted { background: var(--storm50); box-shadow: none; }
+.timeline-title { font-size: 12px; color: var(--text0); }
+.timeline-sub { font-size: 11px; color: var(--text1); }
+
+.object-pane { display: flex; flex-direction: column; min-width: 0; }
+.object-pane-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px; }
+.object-mode-chip { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; padding: 2px 7px; border-radius: 999px; background: color-mix(in srgb, #2ec377 14%, transparent); color: #a7fbed; }
+.object-pane-body { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; height: 100%; }
+.object-list { display: flex; flex-direction: column; gap: 4px; }
+.object-row { border-radius: 9px; border: 1px solid transparent; background: transparent; padding: 5px 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text0); font-size: 12px; }
+.object-row:hover { background: linear-gradient(90deg, color-mix(in srgb, var(--sky80) 12%, transparent), transparent); }
+.object-row.active { border-color: color-mix(in srgb, var(--sky80) 45%, transparent); background: linear-gradient(90deg, color-mix(in srgb, var(--sky80) 16%, transparent), transparent); }
+.object-dot { width: 9px; height: 9px; border-radius: 999px; background: var(--sky80); }
+.object-dot.layout { background: linear-gradient(135deg, var(--ai1), var(--sky80)); }
+.object-dot.thread { background: linear-gradient(135deg, #fe8e22, var(--ai0)); }
+.object-dot.callout { background: linear-gradient(135deg, var(--ai0), var(--ai1)); }
+.object-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.object-sub { font-size: 11px; color: var(--text1); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.object-editor { margin-top: 4px; padding: 6px; border-radius: 9px; background: color-mix(in srgb, var(--bg0) 85%, transparent); border: 1px solid color-mix(in srgb, var(--storm35) 90%, transparent); display: flex; flex-direction: column; gap: 6px; overflow: auto; }
+.object-editor-title { font-size: 12px; font-weight: 500; }
+.field { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: var(--text1); }
+.field-row { display: flex; align-items: center; gap: 6px; }
+.field-value { font-size: 11px; color: var(--text0); }
+.field-select, .field-textarea, .object-editor input[type='range'] { width: 100%; }
+.field-select, .field-textarea { border-radius: 7px; border: 1px solid color-mix(in srgb, var(--storm35) 90%, transparent); background: color-mix(in srgb, var(--bg0) 75%, transparent); color: var(--text0); padding: 4px 6px; font-size: 11px; }
+.field-textarea { resize: vertical; }
+
+@media (max-width: 980px) {
+  .app-shell { grid-template-columns: 240px minmax(0, 1fr); }
+  .right-pane, .resize-handle { display: none; }
+}
+`
+
 export default function IndexPage() {
   const [viewMode, setViewMode] = React.useState<ViewMode>('nav')
   const [rightWidth, setRightWidth] = React.useState(32)
@@ -85,366 +479,368 @@ export default function IndexPage() {
   }, [isResizing])
 
   return (
-    <div id="layout-root" className="app-shell">
-      <div className="left-rail">
-        <div className="left-rail-header">
-          <div className="product-badge">
-            <span className="product-dot" />
-            <span>AI Console</span>
-          </div>
-          <div className="view-switcher">
-            <button
-              className={viewMode === 'nav' ? 'view-pill active' : 'view-pill'}
-              onClick={() => setViewMode('nav')}
-            >
-              Nav
-            </button>
-            <button
-              className={viewMode === 'threads' ? 'view-pill active' : 'view-pill'}
-              onClick={() => setViewMode('threads')}
-            >
-              Threads
-            </button>
-          </div>
-        </div>
-
-        {viewMode === 'nav' ? (
-          <div className="left-rail-body">
-            <div className="section-label">Workspace</div>
-            <nav className="nav-list">
-              <button className="nav-item active">
-                <span className="nav-icon">◎</span>
-                <span>Home</span>
-              </button>
-              <button className="nav-item">
-                <span className="nav-icon">⚡</span>
-                <span>Workflows</span>
-              </button>
-              <button className="nav-item">
-                <span className="nav-icon">💬</span>
-                <span>Conversations</span>
-              </button>
-              <button className="nav-item">
-                <span className="nav-icon">📊</span>
-                <span>Analytics</span>
-              </button>
-            </nav>
-
-            <div className="section-label">Workflow steps</div>
-            <ul className="workflow-list">
-              <li className="workflow-item">
-                <div className="workflow-pill">Design review</div>
-                <span className="workflow-sub">3 linked threads</span>
-              </li>
-              <li className="workflow-item">
-                <div className="workflow-pill">Launch checklist</div>
-                <span className="workflow-sub">1 in progress</span>
-              </li>
-              <li className="workflow-item">
-                <div className="workflow-pill">Customer feedback loop</div>
-                <span className="workflow-sub">Live</span>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <div className="left-rail-body">
-            <div className="threads-header">
-              <div>
-                <div className="section-label">Threads</div>
-                <div className="threads-subtitle">Recent conversations across workflows</div>
-              </div>
-              <button className="chip tertiary chip-xs">Filter</button>
+    <>
+      <style jsx global>{GLOBAL_CSS}</style>
+      <div id="layout-root" className="app-shell">
+        <div className="left-rail">
+          <div className="left-rail-header">
+            <div className="product-badge">
+              <span className="product-dot" />
+              <span>AI Console</span>
             </div>
-            <div className="threads-filters">
-              <button className="pill-filter active">All</button>
-              <button className="pill-filter">Workflow-linked</button>
-              <button className="pill-filter">General</button>
+            <div className="view-switcher">
+              <button
+                className={viewMode === 'nav' ? 'view-pill active' : 'view-pill'}
+                onClick={() => setViewMode('nav')}
+              >
+                Nav
+              </button>
+              <button
+                className={viewMode === 'threads' ? 'view-pill active' : 'view-pill'}
+                onClick={() => setViewMode('threads')}
+              >
+                Threads
+              </button>
             </div>
+          </div>
 
-            <ul className="thread-list">
-              {mockThreads.map((t) => (
-                <li key={t.id} className="thread-row">
-                  <div className="thread-main">
-                    <div className="thread-title-row">
-                      <span className="thread-title">{t.title}</span>
-                      {t.isWorkflow && (
-                        <span className="thread-workflow-chip" title="Linked to a workflow step">
-                          Workflow step
-                        </span>
-                      )}
-                    </div>
-                    <div className="thread-last">{t.lastMessage}</div>
-                  </div>
-                  <div className="thread-meta">
-                    {t.isWorkflow && t.workflowLabel && (
-                      <div className="thread-meta-label">{t.workflowLabel}</div>
-                    )}
-                    <div className="thread-time">{t.time}</div>
-                  </div>
+          {viewMode === 'nav' ? (
+            <div className="left-rail-body">
+              <div className="section-label">Workspace</div>
+              <nav className="nav-list">
+                <button className="nav-item active">
+                  <span className="nav-icon">◎</span>
+                  <span>Home</span>
+                </button>
+                <button className="nav-item">
+                  <span className="nav-icon">⚡</span>
+                  <span>Workflows</span>
+                </button>
+                <button className="nav-item">
+                  <span className="nav-icon">💬</span>
+                  <span>Conversations</span>
+                </button>
+                <button className="nav-item">
+                  <span className="nav-icon">📊</span>
+                  <span>Analytics</span>
+                </button>
+              </nav>
+
+              <div className="section-label">Workflow steps</div>
+              <ul className="workflow-list">
+                <li>
+                  <div className="workflow-pill">Design review</div>
+                  <span className="workflow-sub">3 linked threads</span>
                 </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-
-      <div className="center-pane">
-        <header className="center-header">
-          <div>
-            <div className="center-title">Conversation with AI</div>
-            <div className="center-subtitle">Prototype of a conversational workflow console</div>
-          </div>
-          <div className="center-header-actions">
-            <button className="chip">New thread</button>
-            <button className="chip secondary">Attach to workflow</button>
-          </div>
-        </header>
-
-        <div className="chat-window">
-          <div className="chat-message from-user">
-            <div className="avatar">U</div>
-            <div className="bubble">
-              <div className="bubble-header">
-                <span className="name">You</span>
-                <span className="time">2:14 PM</span>
-              </div>
-              <div className="bubble-body">
-                Walk through my design and highlight anything risky for implementation.
-              </div>
+                <li>
+                  <div className="workflow-pill">Launch checklist</div>
+                  <span className="workflow-sub">1 in progress</span>
+                </li>
+                <li>
+                  <div className="workflow-pill">Customer feedback loop</div>
+                  <span className="workflow-sub">Live</span>
+                </li>
+              </ul>
             </div>
-          </div>
-
-          <div className="chat-message from-ai">
-            <div className="avatar ai">A</div>
-            <div className="bubble">
-              <div className="bubble-header">
-                <span className="name">Assistant</span>
-                <span className="time">2:14 PM</span>
-              </div>
-              <div className="bubble-body">
-                I’ve grouped this into three areas: layout, data-loading, and collaboration. Hover
-                over any callout in the right panel to see where it maps in the design.
-              </div>
-            </div>
-          </div>
-
-          <div className="chat-message from-ai">
-            <div className="avatar ai">A</div>
-            <div className="bubble">
-              <div className="bubble-header">
-                <span className="name">Assistant</span>
-                <span className="time">2:16 PM</span>
-              </div>
-              <div className="bubble-body">
-                I can also attach this conversation to the “Design review” workflow so future runs
-                reuse the same prompts and structure.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="composer">
-          <div className="composer-top-row">
-            <div className="composer-mode">
-              <span className="dot live" />
-              Live conversation
-            </div>
-            <button className="chip tertiary">Save as reusable step</button>
-          </div>
-          <div className="composer-input-row">
-            <textarea
-              className="composer-input"
-              placeholder="Describe what you want the assistant to do in this workflow step…"
-              rows={2}
-            />
-            <button className="composer-send">Send</button>
-          </div>
-        </div>
-      </div>
-
-      <div
-        className="resize-handle"
-        onMouseDown={handleMouseDown}
-        aria-label="Resize details panel"
-        role="separator"
-        aria-orientation="vertical"
-      >
-        <span className="grip" />
-      </div>
-
-      <div className="right-pane" style={{ width: `${rightWidth}%` }}>
-        <header className="right-header">
-          <div>
-            <div className="right-title">Workflow context</div>
-            <div className="right-subtitle">How this conversation connects to automation</div>
-          </div>
-          <button className="chip tertiary">Edit workflow</button>
-        </header>
-
-        <div className="right-body">
-          <div className="right-body-columns">
-            <div className="right-overview">
-              <section className="callout">
-                <div className="callout-label">Linked step</div>
-                <div className="callout-title">Design review · Step 2</div>
-                <p className="callout-copy">
-                  This step runs after a new Figma link is added. The assistant checks layout,
-                  spacing, and component usage against your design system.
-                </p>
-              </section>
-
-              <section className="callout-list">
-                <div className="callout-label">Callouts in this thread</div>
-                <ul>
-                  <li>
-                    <span className="badge badge-layout">Layout</span>
-                    Missing responsive state for the right rail at tablet widths.
-                  </li>
-                  <li>
-                    <span className="badge badge-data">Data</span>
-                    Loading state uses three different spinners across screens.
-                  </li>
-                  <li>
-                    <span className="badge badge-collab">Collab</span>
-                    No clear handoff between design and engineering comments.
-                  </li>
-                </ul>
-              </section>
-
-              <section className="timeline">
-                <div className="callout-label">Run history</div>
-                <ul className="timeline-list">
-                  <li>
-                    <span className="dot small" />
-                    <div>
-                      <div className="timeline-title">Today · 2:14 PM</div>
-                      <div className="timeline-sub">Triggered from Figma “Marketing page v3”</div>
-                    </div>
-                  </li>
-                  <li>
-                    <span className="dot small muted" />
-                    <div>
-                      <div className="timeline-title">Yesterday · 4:02 PM</div>
-                      <div className="timeline-sub">Manual run from Conversations</div>
-                    </div>
-                  </li>
-                </ul>
-              </section>
-            </div>
-
-            <aside className="object-pane">
-              <div className="object-pane-header">
-                <div className="callout-label">Object inspector</div>
-                <div className="object-mode-chip">Sandbox</div>
-              </div>
-
-              <div className="object-pane-body">
-                <div className="object-list">
-                  <button
-                    className={selectedObjectId === 'layout' ? 'object-row active' : 'object-row'}
-                    onClick={() => setSelectedObjectId('layout')}
-                  >
-                    <span className="object-dot layout" />
-                    <div className="object-main">
-                      <div className="object-title">Layout config</div>
-                      <div className="object-sub">Panels · Breakpoints · Density</div>
-                    </div>
-                  </button>
-
-                  <button
-                    className={selectedObjectId === 'thread' ? 'object-row active' : 'object-row'}
-                    onClick={() => setSelectedObjectId('thread')}
-                  >
-                    <span className="object-dot thread" />
-                    <div className="object-main">
-                      <div className="object-title">Selected thread</div>
-                      <div className="object-sub">Metadata · Workflow links</div>
-                    </div>
-                  </button>
-
-                  <button
-                    className={selectedObjectId === 'callout' ? 'object-row active' : 'object-row'}
-                    onClick={() => setSelectedObjectId('callout')}
-                  >
-                    <span className="object-dot callout" />
-                    <div className="object-main">
-                      <div className="object-title">Callout template</div>
-                      <div className="object-sub">Severity · Tags · Targets</div>
-                    </div>
-                  </button>
+          ) : (
+            <div className="left-rail-body">
+              <div className="threads-header">
+                <div>
+                  <div className="section-label">Threads</div>
+                  <div className="threads-subtitle">Recent conversations across workflows</div>
                 </div>
+                <button className="chip tertiary">Filter</button>
+              </div>
+              <div className="threads-filters">
+                <button className="pill-filter active">All</button>
+                <button className="pill-filter">Workflow-linked</button>
+                <button className="pill-filter">General</button>
+              </div>
 
-                <div className="object-editor">
-                  {selectedObjectId === 'layout' && (
-                    <>
-                      <div className="object-editor-title">Layout configuration</div>
-                      <label className="field">
-                        <span className="field-label">Right panel width</span>
-                        <div className="field-row">
-                          <input type="range" min={20} max={60} value={rightWidth} readOnly />
-                          <span className="field-value">{Math.round(rightWidth)}%</span>
-                        </div>
-                      </label>
-                      <label className="field">
-                        <span className="field-label">Density</span>
-                        <select className="field-select" defaultValue="comfortable">
-                          <option value="comfortable">Comfortable</option>
-                          <option value="compact">Compact</option>
-                          <option value="cozy">Cozy</option>
-                        </select>
-                      </label>
-                    </>
-                  )}
+              <ul className="thread-list">
+                {mockThreads.map((t) => (
+                  <li key={t.id} className="thread-row">
+                    <div className="thread-main" style={{ flex: 1, minWidth: 0 }}>
+                      <div className="thread-title-row" style={{ display: 'flex', gap: 6 }}>
+                        <span className="thread-title">{t.title}</span>
+                        {t.isWorkflow && (
+                          <span className="thread-workflow-chip" title="Linked to a workflow step">
+                            Workflow step
+                          </span>
+                        )}
+                      </div>
+                      <div className="thread-last">{t.lastMessage}</div>
+                    </div>
+                    <div className="thread-meta">
+                      {t.isWorkflow && t.workflowLabel && (
+                        <div className="thread-meta-label">{t.workflowLabel}</div>
+                      )}
+                      <div className="thread-time">{t.time}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
-                  {selectedObjectId === 'thread' && (
-                    <>
-                      <div className="object-editor-title">Thread metadata</div>
-                      <label className="field">
-                        <span className="field-label">Thread type</span>
-                        <select className="field-select" defaultValue="workflow">
-                          <option value="workflow">Workflow-linked</option>
-                          <option value="general">General</option>
-                        </select>
-                      </label>
-                      <label className="field">
-                        <span className="field-label">Display badge</span>
-                        <select className="field-select" defaultValue="chain">
-                          <option value="chain">Chain icon</option>
-                          <option value="pill">Pill label</option>
-                          <option value="none">None</option>
-                        </select>
-                      </label>
-                    </>
-                  )}
+        <div className="center-pane">
+          <header className="center-header">
+            <div>
+              <div className="center-title">Conversation with AI</div>
+              <div className="center-subtitle">Prototype of a conversational workflow console</div>
+            </div>
+            <div className="center-header-actions">
+              <button className="chip">New thread</button>
+              <button className="chip secondary">Attach to workflow</button>
+            </div>
+          </header>
 
-                  {selectedObjectId === 'callout' && (
-                    <>
-                      <div className="object-editor-title">Callout template</div>
-                      <label className="field">
-                        <span className="field-label">Default severity</span>
-                        <select className="field-select" defaultValue="medium">
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                      </label>
-                      <label className="field">
-                        <span className="field-label">Auto-tag rules</span>
-                        <textarea
-                          rows={3}
-                          className="field-textarea"
-                          defaultValue="If the assistant mentions responsiveness, tag as Layout."
-                        />
-                      </label>
-                    </>
-                  )}
+          <div className="chat-window">
+            <div className="chat-message from-user">
+              <div className="avatar">U</div>
+              <div className="bubble">
+                <div className="bubble-header">
+                  <span className="name">You</span>
+                  <span className="time">2:14 PM</span>
+                </div>
+                <div className="bubble-body">
+                  Walk through my design and highlight anything risky for implementation.
                 </div>
               </div>
-            </aside>
+            </div>
+
+            <div className="chat-message from-ai">
+              <div className="avatar ai">A</div>
+              <div className="bubble">
+                <div className="bubble-header">
+                  <span className="name">Assistant</span>
+                  <span className="time">2:14 PM</span>
+                </div>
+                <div className="bubble-body">
+                  I’ve grouped this into three areas: layout, data-loading, and collaboration.
+                  Hover over any callout in the right panel to see where it maps in the design.
+                </div>
+              </div>
+            </div>
+
+            <div className="chat-message from-ai">
+              <div className="avatar ai">A</div>
+              <div className="bubble">
+                <div className="bubble-header">
+                  <span className="name">Assistant</span>
+                  <span className="time">2:16 PM</span>
+                </div>
+                <div className="bubble-body">
+                  I can also attach this conversation to the “Design review” workflow so future runs
+                  reuse the same prompts and structure.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="composer">
+            <div className="composer-top-row">
+              <div className="composer-mode">
+                <span className="dot live" />
+                Live conversation
+              </div>
+              <button className="chip tertiary">Save as reusable step</button>
+            </div>
+            <div className="composer-input-row">
+              <textarea
+                className="composer-input"
+                placeholder="Describe what you want the assistant to do in this workflow step…"
+                rows={2}
+              />
+              <button className="composer-send">Send</button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="resize-handle"
+          onMouseDown={handleMouseDown}
+          aria-label="Resize details panel"
+          role="separator"
+          aria-orientation="vertical"
+        >
+          <span className="grip" />
+        </div>
+
+        <div className="right-pane" style={{ width: `${rightWidth}%` }}>
+          <header className="right-header">
+            <div>
+              <div className="right-title">Workflow context</div>
+              <div className="right-subtitle">How this conversation connects to automation</div>
+            </div>
+            <button className="chip tertiary">Edit workflow</button>
+          </header>
+
+          <div className="right-body">
+            <div className="right-body-columns">
+              <div className="right-overview">
+                <section className="callout">
+                  <div className="callout-label">Linked step</div>
+                  <div className="callout-title">Design review · Step 2</div>
+                  <p className="callout-copy">
+                    This step runs after a new Figma link is added. The assistant checks layout,
+                    spacing, and component usage against your design system.
+                  </p>
+                </section>
+
+                <section className="callout-list">
+                  <div className="callout-label">Callouts in this thread</div>
+                  <ul>
+                    <li>
+                      <span className="badge badge-layout">Layout</span>
+                      Missing responsive state for the right rail at tablet widths.
+                    </li>
+                    <li>
+                      <span className="badge badge-data">Data</span>
+                      Loading state uses three different spinners across screens.
+                    </li>
+                    <li>
+                      <span className="badge badge-collab">Collab</span>
+                      No clear handoff between design and engineering comments.
+                    </li>
+                  </ul>
+                </section>
+
+                <section className="timeline">
+                  <div className="callout-label">Run history</div>
+                  <ul className="timeline-list">
+                    <li>
+                      <span className="dot small" />
+                      <div>
+                        <div className="timeline-title">Today · 2:14 PM</div>
+                        <div className="timeline-sub">Triggered from Figma “Marketing page v3”</div>
+                      </div>
+                    </li>
+                    <li>
+                      <span className="dot small muted" />
+                      <div>
+                        <div className="timeline-title">Yesterday · 4:02 PM</div>
+                        <div className="timeline-sub">Manual run from Conversations</div>
+                      </div>
+                    </li>
+                  </ul>
+                </section>
+              </div>
+
+              <aside className="object-pane">
+                <div className="object-pane-header">
+                  <div className="callout-label">Object inspector</div>
+                  <div className="object-mode-chip">Sandbox</div>
+                </div>
+
+                <div className="object-pane-body">
+                  <div className="object-list">
+                    <button
+                      className={selectedObjectId === 'layout' ? 'object-row active' : 'object-row'}
+                      onClick={() => setSelectedObjectId('layout')}
+                    >
+                      <span className="object-dot layout" />
+                      <div className="object-main">
+                        <div className="object-title">Layout config</div>
+                        <div className="object-sub">Panels · Breakpoints · Density</div>
+                      </div>
+                    </button>
+
+                    <button
+                      className={selectedObjectId === 'thread' ? 'object-row active' : 'object-row'}
+                      onClick={() => setSelectedObjectId('thread')}
+                    >
+                      <span className="object-dot thread" />
+                      <div className="object-main">
+                        <div className="object-title">Selected thread</div>
+                        <div className="object-sub">Metadata · Workflow links</div>
+                      </div>
+                    </button>
+
+                    <button
+                      className={selectedObjectId === 'callout' ? 'object-row active' : 'object-row'}
+                      onClick={() => setSelectedObjectId('callout')}
+                    >
+                      <span className="object-dot callout" />
+                      <div className="object-main">
+                        <div className="object-title">Callout template</div>
+                        <div className="object-sub">Severity · Tags · Targets</div>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="object-editor">
+                    {selectedObjectId === 'layout' && (
+                      <>
+                        <div className="object-editor-title">Layout configuration</div>
+                        <label className="field">
+                          <span className="field-label">Right panel width</span>
+                          <div className="field-row">
+                            <input type="range" min={20} max={60} value={rightWidth} readOnly />
+                            <span className="field-value">{Math.round(rightWidth)}%</span>
+                          </div>
+                        </label>
+                        <label className="field">
+                          <span className="field-label">Density</span>
+                          <select className="field-select" defaultValue="comfortable">
+                            <option value="comfortable">Comfortable</option>
+                            <option value="compact">Compact</option>
+                            <option value="cozy">Cozy</option>
+                          </select>
+                        </label>
+                      </>
+                    )}
+
+                    {selectedObjectId === 'thread' && (
+                      <>
+                        <div className="object-editor-title">Thread metadata</div>
+                        <label className="field">
+                          <span className="field-label">Thread type</span>
+                          <select className="field-select" defaultValue="workflow">
+                            <option value="workflow">Workflow-linked</option>
+                            <option value="general">General</option>
+                          </select>
+                        </label>
+                        <label className="field">
+                          <span className="field-label">Display badge</span>
+                          <select className="field-select" defaultValue="chain">
+                            <option value="chain">Chain icon</option>
+                            <option value="pill">Pill label</option>
+                            <option value="none">None</option>
+                          </select>
+                        </label>
+                      </>
+                    )}
+
+                    {selectedObjectId === 'callout' && (
+                      <>
+                        <div className="object-editor-title">Callout template</div>
+                        <label className="field">
+                          <span className="field-label">Default severity</span>
+                          <select className="field-select" defaultValue="medium">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                          </select>
+                        </label>
+                        <label className="field">
+                          <span className="field-label">Auto-tag rules</span>
+                          <textarea
+                            rows={3}
+                            className="field-textarea"
+                            defaultValue="If the assistant mentions responsiveness, tag as Layout."
+                          />
+                        </label>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </aside>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
-

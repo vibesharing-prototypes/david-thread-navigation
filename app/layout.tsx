@@ -1,15 +1,17 @@
-import './globals.css'
+import "./globals.css";
 
 export const metadata = {
-  title: 'Thread navigation prototype',
-  description: 'Three-panel console prototype with resizable panes.',
-}
+  title: "Thread navigation",
+  description: "Prototype deployed via VibeSharing",
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        <script src="https://vibesharing.app/vs-sdk.js" defer></script>
+      </head>
+      <body className="antialiased">{children}</body>
     </html>
-  )
+  );
 }
-
