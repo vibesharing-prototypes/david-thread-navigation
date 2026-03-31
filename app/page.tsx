@@ -13,6 +13,14 @@ type Thread = {
   workflowLabel?: string
 }
 
+type ChatMessage = {
+  id: string
+  from: 'user' | 'ai'
+  name: string
+  time: string
+  text: string
+}
+
 const mockThreads: Thread[] = [
   {
     id: 1,
@@ -178,7 +186,7 @@ button, input, select, textarea { font: inherit; }
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .section-label {
@@ -189,12 +197,50 @@ button, input, select, textarea { font: inherit; }
   padding: 0 4px;
 }
 
-.nav-list {
+.callout, .callout-list, .timeline, .object-pane { border-radius: 12px; border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent); background: radial-gradient(circle at top left, var(--surface2), var(--surface1)); }
+.callout { padding: 8px 10px 10px; }
+.callout-list, .timeline, .object-pane { padding: 7px 9px 9px; }
+.callout-label { font-size: 11px; color: var(--text1); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 4px; }
+.callout-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.callout-copy { font-size: 12px; color: var(--text1); margin: 0; }
+.callout-list ul, .timeline-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; font-size: 11px; margin-right: 6px; border: 1px solid color-mix(in srgb, var(--storm35) 70%, transparent); }
+.badge-layout { background: color-mix(in srgb, var(--ai1) 14%, transparent); }
+.badge-data { background: color-mix(in srgb, var(--sky80) 14%, transparent); }
+.badge-collab { background: color-mix(in srgb, var(--ai0) 14%, transparent); }
+.timeline-list li { display: flex; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 999px; background: #2ec377; }
+.dot.live { box-shadow: 0 0 8px color-mix(in srgb, #2ec377 55%, transparent); }
+.dot.small { width: 7px; height: 7px; }
+.dot.small.muted { background: var(--storm50); box-shadow: none; }
+.timeline-title { font-size: 12px; color: var(--text0); }
+.timeline-sub { font-size: 11px; color: var(--text1); }
+
+.thread-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 2px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 2px 0 6px;
+  gap: 6px;
+  overflow: auto;
 }
+
+.thread-row {
+  display: flex;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top left, var(--surface2), var(--surface1));
+  border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent);
+}
+
+.thread-title { font-size: 13px; font-weight: 500; }
+.thread-last { font-size: 12px; color: var(--text1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.thread-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.thread-time { font-size: 11px; color: var(--text1); }
+.thread-meta-label { font-size: 10px; padding: 2px 6px; border-radius: 999px; background: color-mix(in srgb, #2ec377 14%, transparent); color: #a7fbed; }
+.thread-workflow-chip { font-size: 11px; padding: 1px 6px; border-radius: 999px; background: color-mix(in srgb, var(--ai1) 18%, transparent); }
 
 .nav-item {
   border-radius: 9px;
@@ -229,32 +275,6 @@ button, input, select, textarea { font: inherit; }
   font-size: 11px;
 }
 
-.workflow-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 2px 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.workflow-pill {
-  display: inline-flex;
-  align-items: center;
-  max-width: 100%;
-  padding: 4px 8px;
-  border-radius: 999px;
-  background: color-mix(in srgb, #2ec377 14%, transparent);
-  color: color-mix(in srgb, #72fcaa 90%, white);
-  font-size: 12px;
-}
-
-.workflow-sub {
-  font-size: 11px;
-  color: var(--text1);
-  padding-left: 4px;
-}
-
 .threads-header {
   display: flex;
   align-items: center;
@@ -282,32 +302,6 @@ button, input, select, textarea { font: inherit; }
   background: linear-gradient(90deg, var(--ai0), var(--ai1));
   color: var(--storm10);
 }
-
-.thread-list {
-  list-style: none;
-  margin: 0;
-  padding: 4px 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  overflow: auto;
-}
-
-.thread-row {
-  display: flex;
-  gap: 8px;
-  padding: 7px 8px;
-  border-radius: 10px;
-  background: radial-gradient(circle at top left, var(--surface2), var(--surface1));
-  border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent);
-}
-
-.thread-title { font-size: 13px; font-weight: 500; }
-.thread-last { font-size: 12px; color: var(--text1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.thread-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.thread-time { font-size: 11px; color: var(--text1); }
-.thread-meta-label { font-size: 10px; padding: 2px 6px; border-radius: 999px; background: color-mix(in srgb, #2ec377 14%, transparent); color: #a7fbed; }
-.thread-workflow-chip { font-size: 11px; padding: 1px 6px; border-radius: 999px; background: color-mix(in srgb, var(--ai1) 18%, transparent); }
 
 .center-pane {
   display: flex;
@@ -366,8 +360,6 @@ button, input, select, textarea { font: inherit; }
 .composer { margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--line0); display: flex; flex-direction: column; gap: 6px; }
 .composer-top-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .composer-mode { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text1); }
-.dot { width: 8px; height: 8px; border-radius: 999px; background: #2ec377; }
-.dot.live { box-shadow: 0 0 8px color-mix(in srgb, #2ec377 55%, transparent); }
 .composer-input-row { display: flex; gap: 8px; align-items: flex-end; }
 .composer-input { flex: 1; resize: none; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--storm35) 90%, transparent); background: color-mix(in srgb, var(--bg0) 75%, transparent); color: var(--text0); font-size: 13px; padding: 7px 9px; }
 .composer-input::placeholder { color: color-mix(in srgb, var(--storm60) 80%, transparent); }
@@ -395,22 +387,6 @@ button, input, select, textarea { font: inherit; }
 .right-body { margin-top: 8px; overflow: hidden; display: flex; flex-direction: column; }
 .right-body-columns { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 8px; height: 100%; }
 .right-overview { overflow: auto; display: flex; flex-direction: column; gap: 8px; }
-.callout, .callout-list, .timeline, .object-pane { border-radius: 12px; border: 1px solid color-mix(in srgb, var(--storm35) 85%, transparent); background: radial-gradient(circle at top left, var(--surface2), var(--surface1)); }
-.callout { padding: 8px 10px 10px; }
-.callout-list, .timeline, .object-pane { padding: 7px 9px 9px; }
-.callout-label { font-size: 11px; color: var(--text1); text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 4px; }
-.callout-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-.callout-copy { font-size: 12px; color: var(--text1); margin: 0; }
-.callout-list ul, .timeline-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
-.badge { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 999px; font-size: 11px; margin-right: 6px; border: 1px solid color-mix(in srgb, var(--storm35) 70%, transparent); }
-.badge-layout { background: color-mix(in srgb, var(--ai1) 14%, transparent); }
-.badge-data { background: color-mix(in srgb, var(--sky80) 14%, transparent); }
-.badge-collab { background: color-mix(in srgb, var(--ai0) 14%, transparent); }
-.timeline-list li { display: flex; gap: 8px; }
-.dot.small { width: 7px; height: 7px; }
-.dot.small.muted { background: var(--storm50); box-shadow: none; }
-.timeline-title { font-size: 12px; color: var(--text0); }
-.timeline-sub { font-size: 11px; color: var(--text1); }
 
 .object-pane { display: flex; flex-direction: column; min-width: 0; }
 .object-pane-header { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px; }
@@ -446,6 +422,8 @@ export default function IndexPage() {
   const [rightWidth, setRightWidth] = React.useState(32)
   const [isResizing, setIsResizing] = React.useState(false)
   const [selectedObjectId, setSelectedObjectId] = React.useState<string>('layout')
+  const [selectedThreadId, setSelectedThreadId] = React.useState<number>(mockThreads[0]?.id ?? 1)
+  const [isWorkflowThreadsOpen, setIsWorkflowThreadsOpen] = React.useState(false)
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -478,6 +456,96 @@ export default function IndexPage() {
     }
   }, [isResizing])
 
+  React.useEffect(() => {
+    setViewMode('nav')
+  }, [])
+
+  const selectedThread = React.useMemo(
+    () => mockThreads.find((t) => t.id === selectedThreadId) ?? mockThreads[0],
+    [selectedThreadId],
+  )
+
+  const workflowThreads = React.useMemo(() => mockThreads.filter((t) => t.isWorkflow), [])
+
+  const threadMessages = React.useMemo<Record<number, ChatMessage[]>>(
+    () => ({
+      1: [
+        {
+          id: 'u-1',
+          from: 'user',
+          name: 'You',
+          time: '2:14 PM',
+          text: 'Walk through my design and highlight anything risky for implementation.',
+        },
+        {
+          id: 'a-1',
+          from: 'ai',
+          name: 'Assistant',
+          time: '2:14 PM',
+          text: 'I’ve grouped this into three areas: layout, data-loading, and collaboration. Hover over any callout in the context panel to see where it maps in the design.',
+        },
+        {
+          id: 'a-2',
+          from: 'ai',
+          name: 'Assistant',
+          time: '2:16 PM',
+          text: 'If you want, I can attach this thread to the “Design review” workflow so future runs reuse the same prompts and structure.',
+        },
+      ],
+      2: [
+        {
+          id: 'u-2',
+          from: 'user',
+          name: 'You',
+          time: '1:03 PM',
+          text: 'Summarize PR #482 and call out any risky changes.',
+        },
+        {
+          id: 'a-3',
+          from: 'ai',
+          name: 'Assistant',
+          time: '1:05 PM',
+          text: 'I’ll summarize by area (UI, API, tests), then list risks + suggested follow-ups. Want this formatted for a Slack update or a PR comment?',
+        },
+      ],
+      3: [
+        {
+          id: 'u-3',
+          from: 'user',
+          name: 'You',
+          time: 'Yesterday',
+          text: 'Give me 10 headline options for the landing page.',
+        },
+        {
+          id: 'a-4',
+          from: 'ai',
+          name: 'Assistant',
+          time: 'Yesterday',
+          text: 'Here are 10 options across punchy, credible, and playful tones. Which direction should I refine?',
+        },
+      ],
+      4: [
+        {
+          id: 'u-4',
+          from: 'user',
+          name: 'You',
+          time: 'Mon',
+          text: 'What are some good OKR examples for an engineering team?',
+        },
+        {
+          id: 'a-5',
+          from: 'ai',
+          name: 'Assistant',
+          time: 'Mon',
+          text: 'I’ll share a few OKR sets for reliability, developer experience, and delivery predictability, each with measurable key results.',
+        },
+      ],
+    }),
+    [],
+  )
+
+  const messagesForSelected = (selectedThread?.id && threadMessages[selectedThread.id]) || []
+
   return (
     <>
       <style jsx global>{GLOBAL_CSS}</style>
@@ -493,7 +561,7 @@ export default function IndexPage() {
                 className={viewMode === 'nav' ? 'view-pill active' : 'view-pill'}
                 onClick={() => setViewMode('nav')}
               >
-                Nav
+                Context
               </button>
               <button
                 className={viewMode === 'threads' ? 'view-pill active' : 'view-pill'}
@@ -506,41 +574,54 @@ export default function IndexPage() {
 
           {viewMode === 'nav' ? (
             <div className="left-rail-body">
-              <div className="section-label">Workspace</div>
-              <nav className="nav-list">
-                <button className="nav-item active">
-                  <span className="nav-icon">◎</span>
-                  <span>Home</span>
-                </button>
-                <button className="nav-item">
-                  <span className="nav-icon">⚡</span>
-                  <span>Workflows</span>
-                </button>
-                <button className="nav-item">
-                  <span className="nav-icon">💬</span>
-                  <span>Conversations</span>
-                </button>
-                <button className="nav-item">
-                  <span className="nav-icon">📊</span>
-                  <span>Analytics</span>
-                </button>
-              </nav>
+              <div className="section-label">Workflow context</div>
 
-              <div className="section-label">Workflow steps</div>
-              <ul className="workflow-list">
-                <li>
-                  <div className="workflow-pill">Design review</div>
-                  <span className="workflow-sub">3 linked threads</span>
-                </li>
-                <li>
-                  <div className="workflow-pill">Launch checklist</div>
-                  <span className="workflow-sub">1 in progress</span>
-                </li>
-                <li>
-                  <div className="workflow-pill">Customer feedback loop</div>
-                  <span className="workflow-sub">Live</span>
-                </li>
-              </ul>
+              <section className="callout">
+                <div className="callout-label">Linked step</div>
+                <div className="callout-title">Design review · Step 2</div>
+                <p className="callout-copy">
+                  This step runs after a new Figma link is added. The assistant checks layout,
+                  spacing, and component usage against your design system.
+                </p>
+              </section>
+
+              <section className="callout-list">
+                <div className="callout-label">Callouts in this thread</div>
+                <ul>
+                  <li>
+                    <span className="badge badge-layout">Layout</span>
+                    Missing responsive state for the right rail at tablet widths.
+                  </li>
+                  <li>
+                    <span className="badge badge-data">Data</span>
+                    Loading state uses three different spinners across screens.
+                  </li>
+                  <li>
+                    <span className="badge badge-collab">Collab</span>
+                    No clear handoff between design and engineering comments.
+                  </li>
+                </ul>
+              </section>
+
+              <section className="timeline">
+                <div className="callout-label">Run history</div>
+                <ul className="timeline-list">
+                  <li>
+                    <span className="dot small" />
+                    <div>
+                      <div className="timeline-title">Today · 2:14 PM</div>
+                      <div className="timeline-sub">Triggered from Figma “Marketing page v3”</div>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="dot small muted" />
+                    <div>
+                      <div className="timeline-title">Yesterday · 4:02 PM</div>
+                      <div className="timeline-sub">Manual run from Conversations</div>
+                    </div>
+                  </li>
+                </ul>
+              </section>
             </div>
           ) : (
             <div className="left-rail-body">
@@ -551,7 +632,7 @@ export default function IndexPage() {
                 </div>
                 <button className="chip tertiary">Filter</button>
               </div>
-              <div className="threads-filters">
+              <div className="threads-filters" style={{ display: 'flex', gap: 4, margin: '2px 0 4px' }}>
                 <button className="pill-filter active">All</button>
                 <button className="pill-filter">Workflow-linked</button>
                 <button className="pill-filter">General</button>
@@ -559,9 +640,26 @@ export default function IndexPage() {
 
               <ul className="thread-list">
                 {mockThreads.map((t) => (
-                  <li key={t.id} className="thread-row">
+                  <li
+                    key={t.id}
+                    className="thread-row"
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => setSelectedThreadId(t.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') setSelectedThreadId(t.id)
+                    }}
+                    aria-label={`Open chat: ${t.title}`}
+                    style={{
+                      cursor: 'pointer',
+                      outline:
+                        selectedThreadId === t.id
+                          ? '1px solid rgba(131, 207, 255, 0.35)'
+                          : undefined,
+                    }}
+                  >
                     <div className="thread-main" style={{ flex: 1, minWidth: 0 }}>
-                      <div className="thread-title-row" style={{ display: 'flex', gap: 6 }}>
+                      <div className="thread-title-row" style={{ display: 'flex', gap: 6, marginBottom: 2, alignItems: 'center' }}>
                         <span className="thread-title">{t.title}</span>
                         {t.isWorkflow && (
                           <span className="thread-workflow-chip" title="Linked to a workflow step">
@@ -587,8 +685,12 @@ export default function IndexPage() {
         <div className="center-pane">
           <header className="center-header">
             <div>
-              <div className="center-title">Conversation with AI</div>
-              <div className="center-subtitle">Prototype of a conversational workflow console</div>
+              <div className="center-title">{selectedThread?.title ?? 'Conversation with AI'}</div>
+              <div className="center-subtitle">
+                {selectedThread?.isWorkflow && selectedThread.workflowLabel
+                  ? selectedThread.workflowLabel
+                  : 'General chat'}
+              </div>
             </div>
             <div className="center-header-actions">
               <button className="chip">New thread</button>
@@ -597,47 +699,58 @@ export default function IndexPage() {
           </header>
 
           <div className="chat-window">
-            <div className="chat-message from-user">
-              <div className="avatar">U</div>
-              <div className="bubble">
-                <div className="bubble-header">
-                  <span className="name">You</span>
-                  <span className="time">2:14 PM</span>
-                </div>
-                <div className="bubble-body">
-                  Walk through my design and highlight anything risky for implementation.
-                </div>
-              </div>
-            </div>
-
-            <div className="chat-message from-ai">
-              <div className="avatar ai">A</div>
-              <div className="bubble">
-                <div className="bubble-header">
-                  <span className="name">Assistant</span>
-                  <span className="time">2:14 PM</span>
-                </div>
-                <div className="bubble-body">
-                  I’ve grouped this into three areas: layout, data-loading, and collaboration.
-                  Hover over any callout in the right panel to see where it maps in the design.
+            {messagesForSelected.map((m) => (
+              <div key={m.id} className={`chat-message ${m.from === 'ai' ? 'from-ai' : 'from-user'}`}>
+                <div className={m.from === 'ai' ? 'avatar ai' : 'avatar'}>{m.from === 'ai' ? 'A' : 'U'}</div>
+                <div className="bubble">
+                  <div className="bubble-header">
+                    <span className="name">{m.name}</span>
+                    <span className="time">{m.time}</span>
+                  </div>
+                  <div className="bubble-body">{m.text}</div>
                 </div>
               </div>
-            </div>
-
-            <div className="chat-message from-ai">
-              <div className="avatar ai">A</div>
-              <div className="bubble">
-                <div className="bubble-header">
-                  <span className="name">Assistant</span>
-                  <span className="time">2:16 PM</span>
-                </div>
-                <div className="bubble-body">
-                  I can also attach this conversation to the “Design review” workflow so future runs
-                  reuse the same prompts and structure.
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
+
+          {viewMode === 'nav' && (
+            <div
+              style={{
+                borderTop: '1px solid rgba(76, 82, 101, 0.6)',
+                paddingTop: 8,
+                marginTop: 2,
+              }}
+            >
+              <button
+                className="chip tertiary"
+                onClick={() => setIsWorkflowThreadsOpen((v) => !v)}
+                aria-expanded={isWorkflowThreadsOpen ? 'true' : 'false'}
+                style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}
+              >
+                <span>Workflow threads ({workflowThreads.length})</span>
+                <span>{isWorkflowThreadsOpen ? 'Hide' : 'Show'}</span>
+              </button>
+
+              {isWorkflowThreadsOpen && (
+                <div style={{ marginTop: 8, display: 'grid', gap: 6 }}>
+                  {workflowThreads.map((t) => (
+                    <button
+                      key={t.id}
+                      className={t.id === selectedThreadId ? 'nav-item active' : 'nav-item'}
+                      onClick={() => setSelectedThreadId(t.id)}
+                      style={{ width: '100%', justifyContent: 'space-between' }}
+                    >
+                      <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <span className="nav-icon">💬</span>
+                        <span>{t.title}</span>
+                      </span>
+                      <span style={{ fontSize: 11, color: '#a5abc0' }}>{t.time}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="composer">
             <div className="composer-top-row">
