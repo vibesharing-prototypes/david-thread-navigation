@@ -49,6 +49,7 @@ function App() {
   const [viewMode, setViewMode] = React.useState<ViewMode>('nav')
   const [rightWidth, setRightWidth] = React.useState(32)
   const [isResizing, setIsResizing] = React.useState(false)
+  const [selectedObjectId, setSelectedObjectId] = React.useState<string>('layout')
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -269,52 +270,168 @@ function App() {
         </header>
 
         <div className="right-body">
-          <section className="callout">
-            <div className="callout-label">Linked step</div>
-            <div className="callout-title">Design review · Step 2</div>
-            <p className="callout-copy">
-              This step runs after a new Figma link is added. The assistant checks layout, spacing,
-              and component usage against your design system.
-            </p>
-          </section>
+          <div className="right-body-columns">
+            <div className="right-overview">
+              <section className="callout">
+                <div className="callout-label">Linked step</div>
+                <div className="callout-title">Design review · Step 2</div>
+                <p className="callout-copy">
+                  This step runs after a new Figma link is added. The assistant checks layout,
+                  spacing, and component usage against your design system.
+                </p>
+              </section>
 
-          <section className="callout-list">
-            <div className="callout-label">Callouts in this thread</div>
-            <ul>
-              <li>
-                <span className="badge badge-layout">Layout</span>
-                Missing responsive state for the right rail at tablet widths.
-              </li>
-              <li>
-                <span className="badge badge-data">Data</span>
-                Loading state uses three different spinners across screens.
-              </li>
-              <li>
-                <span className="badge badge-collab">Collab</span>
-                No clear handoff between design and engineering comments.
-              </li>
-            </ul>
-          </section>
+              <section className="callout-list">
+                <div className="callout-label">Callouts in this thread</div>
+                <ul>
+                  <li>
+                    <span className="badge badge-layout">Layout</span>
+                    Missing responsive state for the right rail at tablet widths.
+                  </li>
+                  <li>
+                    <span className="badge badge-data">Data</span>
+                    Loading state uses three different spinners across screens.
+                  </li>
+                  <li>
+                    <span className="badge badge-collab">Collab</span>
+                    No clear handoff between design and engineering comments.
+                  </li>
+                </ul>
+              </section>
 
-          <section className="timeline">
-            <div className="callout-label">Run history</div>
-            <ul className="timeline-list">
-              <li>
-                <span className="dot small" />
-                <div>
-                  <div className="timeline-title">Today · 2:14 PM</div>
-                  <div className="timeline-sub">Triggered from Figma “Marketing page v3”</div>
+              <section className="timeline">
+                <div className="callout-label">Run history</div>
+                <ul className="timeline-list">
+                  <li>
+                    <span className="dot small" />
+                    <div>
+                      <div className="timeline-title">Today · 2:14 PM</div>
+                      <div className="timeline-sub">Triggered from Figma “Marketing page v3”</div>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="dot small muted" />
+                    <div>
+                      <div className="timeline-title">Yesterday · 4:02 PM</div>
+                      <div className="timeline-sub">Manual run from Conversations</div>
+                    </div>
+                  </li>
+                </ul>
+              </section>
+            </div>
+
+            <aside className="object-pane">
+              <div className="object-pane-header">
+                <div className="callout-label">Object inspector</div>
+                <div className="object-mode-chip">Sandbox</div>
+              </div>
+
+              <div className="object-pane-body">
+                <div className="object-list">
+                  <button
+                    className={
+                      selectedObjectId === 'layout' ? 'object-row active' : 'object-row'
+                    }
+                    onClick={() => setSelectedObjectId('layout')}
+                  >
+                    <span className="object-dot layout" />
+                    <div className="object-main">
+                      <div className="object-title">Layout config</div>
+                      <div className="object-sub">Panels · Breakpoints · Density</div>
+                    </div>
+                  </button>
+
+                  <button
+                    className={selectedObjectId === 'thread' ? 'object-row active' : 'object-row'}
+                    onClick={() => setSelectedObjectId('thread')}
+                  >
+                    <span className="object-dot thread" />
+                    <div className="object-main">
+                      <div className="object-title">Selected thread</div>
+                      <div className="object-sub">Metadata · Workflow links</div>
+                    </div>
+                  </button>
+
+                  <button
+                    className={selectedObjectId === 'callout' ? 'object-row active' : 'object-row'}
+                    onClick={() => setSelectedObjectId('callout')}
+                  >
+                    <span className="object-dot callout" />
+                    <div className="object-main">
+                      <div className="object-title">Callout template</div>
+                      <div className="object-sub">Severity · Tags · Targets</div>
+                    </div>
+                  </button>
                 </div>
-              </li>
-              <li>
-                <span className="dot small muted" />
-                <div>
-                  <div className="timeline-title">Yesterday · 4:02 PM</div>
-                  <div className="timeline-sub">Manual run from Conversations</div>
+
+                <div className="object-editor">
+                  {selectedObjectId === 'layout' && (
+                    <>
+                      <div className="object-editor-title">Layout configuration</div>
+                      <label className="field">
+                        <span className="field-label">Right panel width</span>
+                        <div className="field-row">
+                          <input type="range" min={20} max={60} value={rightWidth} readOnly />
+                          <span className="field-value">{Math.round(rightWidth)}%</span>
+                        </div>
+                      </label>
+                      <label className="field">
+                        <span className="field-label">Density</span>
+                        <select className="field-select" defaultValue="comfortable">
+                          <option value="comfortable">Comfortable</option>
+                          <option value="compact">Compact</option>
+                          <option value="cozy">Cozy</option>
+                        </select>
+                      </label>
+                    </>
+                  )}
+
+                  {selectedObjectId === 'thread' && (
+                    <>
+                      <div className="object-editor-title">Thread metadata</div>
+                      <label className="field">
+                        <span className="field-label">Thread type</span>
+                        <select className="field-select" defaultValue="workflow">
+                          <option value="workflow">Workflow-linked</option>
+                          <option value="general">General</option>
+                        </select>
+                      </label>
+                      <label className="field">
+                        <span className="field-label">Display badge</span>
+                        <select className="field-select" defaultValue="chain">
+                          <option value="chain">Chain icon</option>
+                          <option value="pill">Pill label</option>
+                          <option value="none">None</option>
+                        </select>
+                      </label>
+                    </>
+                  )}
+
+                  {selectedObjectId === 'callout' && (
+                    <>
+                      <div className="object-editor-title">Callout template</div>
+                      <label className="field">
+                        <span className="field-label">Default severity</span>
+                        <select className="field-select" defaultValue="medium">
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </label>
+                      <label className="field">
+                        <span className="field-label">Auto-tag rules</span>
+                        <textarea
+                          rows={3}
+                          className="field-textarea"
+                          defaultValue="If the assistant mentions responsiveness, tag as Layout."
+                        />
+                      </label>
+                    </>
+                  )}
                 </div>
-              </li>
-            </ul>
-          </section>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     </div>

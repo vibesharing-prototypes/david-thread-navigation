@@ -490,10 +490,23 @@ body {
 
 .right-body {
   margin-top: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.right-body-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 8px;
+  height: 100%;
+}
+
+.right-overview {
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .callout {
@@ -592,4 +605,172 @@ body {
 .timeline-sub {
   font-size: 11px;
   color: #8993c0;
+}
+
+.object-pane {
+  border-radius: 12px;
+  background: radial-gradient(circle at top right, #14162c, #070712);
+  border: 1px solid rgba(102, 121, 240, 0.85);
+  padding: 7px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.object-pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.object-mode-chip {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(25, 204, 154, 0.14);
+  color: #8ff3d1;
+}
+
+.object-pane-body {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 6px;
+  height: 100%;
+}
+
+.object-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.object-row {
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 5px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #c7cff4;
+  font-size: 12px;
+}
+
+.object-row:hover {
+  background: radial-gradient(circle at left, rgba(97, 119, 255, 0.32), transparent);
+}
+
+.object-row.active {
+  border-color: rgba(139, 162, 255, 0.95);
+  background: radial-gradient(circle at left, rgba(126, 148, 255, 0.55), rgba(21, 23, 46, 0.96));
+  box-shadow: 0 0 0 1px rgba(148, 171, 255, 0.72);
+}
+
+.object-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #6b7aff;
+}
+
+.object-dot.layout {
+  background: linear-gradient(135deg, #6f80ff, #50d2ff);
+}
+
+.object-dot.thread {
+  background: linear-gradient(135deg, #ffb14b, #ff6b8a);
+}
+
+.object-dot.callout {
+  background: linear-gradient(135deg, #c18bff, #7e5cff);
+}
+
+.object-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.object-title {
+  font-size: 12px;
+}
+
+.object-sub {
+  font-size: 11px;
+  color: #8b94c5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.object-editor {
+  margin-top: 4px;
+  padding: 6px 6px 6px;
+  border-radius: 9px;
+  background: rgba(8, 10, 24, 0.96);
+  border: 1px solid rgba(76, 94, 199, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: auto;
+}
+
+.object-editor-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #e3e6ff;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 11px;
+  color: #a4aedc;
+}
+
+.field-label {
+  font-size: 11px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-value {
+  font-size: 11px;
+  color: #dfe5ff;
+}
+
+.field-select,
+.field-textarea,
+.object-editor input[type='range'] {
+  width: 100%;
+}
+
+.field-select {
+  border-radius: 7px;
+  border: 1px solid rgba(66, 82, 173, 0.9);
+  background: rgba(10, 13, 34, 0.96);
+  color: #e5e9ff;
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+.field-textarea {
+  border-radius: 7px;
+  border: 1px solid rgba(66, 82, 173, 0.9);
+  background: rgba(10, 13, 34, 0.96);
+  color: #e5e9ff;
+  padding: 4px 6px;
+  font-size: 11px;
+  resize: vertical;
 }
